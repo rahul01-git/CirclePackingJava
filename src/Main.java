@@ -9,16 +9,5 @@ public class Main {
         frame.setSize(900,400);
         frame.add(cpa);
         frame.setVisible(true);
-
-        new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(10);
-                    cpa.repaint();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 }

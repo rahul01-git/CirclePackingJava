@@ -13,6 +13,7 @@ public class CirclePackingAnimation extends JPanel {
     ArrayList<Vector<Integer>> spots;
     Random random = new Random();
     private BufferedImage image;
+    boolean shouldRepaint = true;
 
     public CirclePackingAnimation() {
         setBackground(Color.BLACK);
@@ -49,7 +50,7 @@ public class CirclePackingAnimation extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 //        g.drawImage(image, 0, 0, null);
-        int total = 10;
+        int total = 1;
         int count = 0;
         int attempts = 0;
         while (count<total){
@@ -61,7 +62,7 @@ public class CirclePackingAnimation extends JPanel {
             attempts++;
             if(attempts>1000){
                 System.out.println("finished");
-                System.exit(0);
+                shouldRepaint = false;
                 break;
             }
         }
@@ -91,7 +92,8 @@ public class CirclePackingAnimation extends JPanel {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        repaint();
+        if(shouldRepaint)
+            repaint();
     }
 
     private Circle newCircle() {
@@ -104,7 +106,7 @@ public class CirclePackingAnimation extends JPanel {
         boolean valid = true;
         for (Circle c : circles) {
             double d = dist(x, y, c.x, c.y);
-            if(d<c.r){
+            if(d<c.r +2){
                 valid = false;
                 break;
             }
