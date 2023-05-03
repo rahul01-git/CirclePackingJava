@@ -1,14 +1,24 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class CirclePackingAnimation extends JPanel {
     ArrayList<Circle> circles;
     Random random = new Random();
+    private BufferedImage backgroundImage;
 
     public CirclePackingAnimation() {
-        setBackground(Color.BLACK);
+//        setBackground(Color.BLACK);
+        try {
+            backgroundImage = ImageIO.read(new File("R:\\Circle packing\\src\\2017.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         setup();
     }
 
@@ -19,10 +29,22 @@ public class CirclePackingAnimation extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        Circle newC = newCircle();
-        if(newC != null){
-            circles.add(newC);
+        g.drawImage(backgroundImage, 0, 0, null);
+        int total = 10;
+        int count = 0;
+        int attempts = 0;
+        while (count<total){
+            Circle newC = newCircle();
+            if(newC != null){
+                circles.add(newC);
+                count++;
+            }
+            attempts++;
+            if(attempts>1000){
+                System.out.println("finished");
+                System.exit(0);
+                break;
+            }
         }
 
         for (Circle c : circles) {
@@ -33,7 +55,7 @@ public class CirclePackingAnimation extends JPanel {
                     for(Circle other : circles){
                         if(c != other){
                             double d = dist(c.x,c.y,other.x,other.y);
-                            if(d<c.r + other.r){
+                            if(d-2<c.r + other.r){
                                 c.growing = false;
                                 break;
                             }
@@ -54,8 +76,8 @@ public class CirclePackingAnimation extends JPanel {
     }
 
     private Circle newCircle() {
-        int x = random.nextInt(640);
-        int y = random.nextInt(460);
+        int x = random.nextInt(900);
+        int y = random.nextInt(400);
 
         boolean valid = true;
         for (Circle c : circles) {
