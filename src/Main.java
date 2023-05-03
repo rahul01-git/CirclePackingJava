@@ -6,7 +6,7 @@ public class Main {
         CirclePackingAnimation cpa = new CirclePackingAnimation();
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(640,360);
+        frame.setSize(640,460);
         frame.add(cpa);
         frame.setVisible(true);
     }
