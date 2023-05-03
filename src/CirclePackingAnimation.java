@@ -6,16 +6,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 
 public class CirclePackingAnimation extends JPanel {
     ArrayList<Circle> circles;
+    ArrayList<Vector<Integer>> spots;
     Random random = new Random();
-    private BufferedImage backgroundImage;
+    private BufferedImage image;
 
     public CirclePackingAnimation() {
-//        setBackground(Color.BLACK);
+        setBackground(Color.BLACK);
         try {
-            backgroundImage = ImageIO.read(new File("R:\\Circle packing\\src\\2017.png"));
+            image = ImageIO.read(new File("R:\\Circle packing\\src\\2017.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -23,13 +25,30 @@ public class CirclePackingAnimation extends JPanel {
     }
 
     void setup(){
+        spots = new ArrayList<Vector<Integer>>();
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                int color = image.getRGB(x, y);
+                int r = (color >> 16) & 0xFF;
+                int g = (color >> 8) & 0xFF;
+                int b = color & 0xFF;
+                float brightness = (r + g + b) / (3f * 255);
+                if(brightness>0.5){
+                    Vector<Integer> pos = new Vector<Integer>(2);
+                    pos.add(x);
+                    pos.add(y);
+                    spots.add(pos);
+                }
+            }
+        }
+//        System.out.println(spots);
         circles = new ArrayList<Circle>();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(backgroundImage, 0, 0, null);
+//        g.drawImage(image, 0, 0, null);
         int total = 10;
         int count = 0;
         int attempts = 0;
@@ -76,8 +95,11 @@ public class CirclePackingAnimation extends JPanel {
     }
 
     private Circle newCircle() {
-        int x = random.nextInt(900);
-        int y = random.nextInt(400);
+
+        int r = random.nextInt(spots.size());
+        Vector<Integer> spot = spots.get(r);
+        int x = spot.get(0);
+        int y = spot.get(1);
 
         boolean valid = true;
         for (Circle c : circles) {
