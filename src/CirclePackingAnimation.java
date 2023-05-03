@@ -19,13 +19,29 @@ public class CirclePackingAnimation extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int x = random.nextInt(640);
-        int y = random.nextInt(460);
-        circles.add(new Circle(x,y));
+
+        Circle newC = newCircle();
+        if(newC != null){
+            circles.add(newC);
+        }
 
         for (Circle c : circles) {
-            if(c.edges(getWidth(), getHeight()))
-                c.growing=false;
+            if (c.growing){
+                if(c.edges(getWidth(), getHeight())){
+                    c.growing=false;
+                }else{
+                    for(Circle other : circles){
+                        if(c != other){
+                            double d = dist(c.x,c.y,other.x,other.y);
+                            if(d<c.r + other.r){
+                                c.growing = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
             c.update();
             c.paint(g);
         }
@@ -36,4 +52,29 @@ public class CirclePackingAnimation extends JPanel {
         }
         repaint();
     }
+
+    private Circle newCircle() {
+        int x = random.nextInt(640);
+        int y = random.nextInt(460);
+
+        boolean valid = true;
+        for (Circle c : circles) {
+            double d = dist(x, y, c.x, c.y);
+            if(d<c.r){
+                valid = false;
+                break;
+            }
+        }
+
+        if(valid){
+            return new Circle(x,y);
+        }else return null;
+    }
+
+    public static double dist(int x1, int y1, int x2, int y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+
+
+
 }
