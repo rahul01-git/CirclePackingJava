@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -6,8 +7,14 @@ public class Main {
         CirclePackingAnimation cpa = new CirclePackingAnimation();
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900,400);
+        frame.setSize(800,600);
+
+        frame.setLayout(new BorderLayout());
         frame.add(cpa);
+        cpa.repaint();
+
+        frame.setLocationRelativeTo(null);
+
         frame.setVisible(true);
     }
 }

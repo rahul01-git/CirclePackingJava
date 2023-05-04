@@ -8,19 +8,17 @@ public class Circle extends JPanel {
     boolean growing = true;
     Color color;
 
-    Circle(int x_, int y_){
+    Circle(int x_, int y_,Color color){
         this.x = x_;
         this.y = y_;
         this.r = 1;
-//        color = Color.getHSBColor((float) Math.random(), 1, 1);
+        this.color = color;
     }
 
     public void update(){
         if(growing){
             r+=1;
-            if(r > 20){  // Limit the maximum radius to 50
-                r = 20;
-            }
+            if(r>5)r=5;
         }
         repaint();
     }
@@ -31,9 +29,8 @@ public class Circle extends JPanel {
 
     public void paint(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
-//        g.setColor(color);
-        g.setColor(Color.white);
-        g2d.drawOval(x-r, y-r, r*2, r*2);
-        g2d.setStroke(new BasicStroke(2));
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(color);
+        g2d.fillOval(x-r, y-r, r*2, r*2);
     }
 }
