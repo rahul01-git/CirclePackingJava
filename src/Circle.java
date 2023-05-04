@@ -12,7 +12,7 @@ public class Circle extends JPanel {
         this.x = x_;
         this.y = y_;
         this.r = 1;
-        color = Color.getHSBColor((float) Math.random(), 1, 1);
+//        color = Color.getHSBColor((float) Math.random(), 1, 1);
     }
 
     public void update(){
@@ -31,9 +31,9 @@ public class Circle extends JPanel {
 
     public void paint(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
-        g.setColor(color);
-        g2d.fillOval(x-r, y-r, r*2, r*2);
+//        g.setColor(color);
         g.setColor(Color.white);
+        g2d.drawOval(x-r, y-r, r*2, r*2);
         g2d.setStroke(new BasicStroke(2));
     }
 }

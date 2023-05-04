@@ -2,7 +2,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.net.URL;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -18,7 +18,8 @@ public class CirclePackingAnimation extends JPanel {
     public CirclePackingAnimation() {
         setBackground(Color.BLACK);
         try {
-            image = ImageIO.read(new File("R:\\Circle packing\\src\\2017.png"));
+            URL imageURL = CirclePackingAnimation.class.getResource("/2017.png");
+            image = ImageIO.read(imageURL);
         } catch (IOException e) {
             e.printStackTrace();
         }
