@@ -33,4 +33,5 @@ public class Circle extends JPanel {
         g.setColor(color);
         g2d.fillOval(x-r, y-r, r*2, r*2);
     }
+
 }

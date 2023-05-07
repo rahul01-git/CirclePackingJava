@@ -10,7 +10,7 @@ public class Main {
         frame.setSize(800,600);
 
         frame.setLayout(new BorderLayout());
-        frame.add(cpa);
+        frame.add(cpa,BorderLayout.CENTER);
         cpa.repaint();
 
         frame.setLocationRelativeTo(null);

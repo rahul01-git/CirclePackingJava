@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFileChooser;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 
@@ -18,7 +20,9 @@ public class CirclePackingAnimation extends JPanel {
     Random random = new Random();
     private BufferedImage image;
     boolean shouldRepaint = true;
+    private JSlider totalSlider;
     BackgroundMusic backgroundMusic = new BackgroundMusic();
+    private int total=10;
 
     public CirclePackingAnimation() {
         setBackground(Color.BLACK);
@@ -35,8 +39,6 @@ public class CirclePackingAnimation extends JPanel {
                 JOptionPane.showMessageDialog(this, "Error loading image: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        System.out.println(image.getWidth() +", "+ image.getHeight() );
-
         backgroundMusic.playMusic();
         setup();
     }
@@ -55,13 +57,35 @@ public class CirclePackingAnimation extends JPanel {
 
     void setup(){
         circles = new ArrayList<Circle>();
+        setLayout(new BorderLayout());
+        JPanel sliderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        totalSlider = new JSlider(JSlider.HORIZONTAL,10,360,10);
+        totalSlider.setMinorTickSpacing(10);
+        totalSlider.setMajorTickSpacing(50);
+        totalSlider.setPaintTicks(true);
+        totalSlider.setPaintLabels(true);
+
+        JLabel totalLabel = new JLabel("Circles Generation Rate = " + totalSlider.getValue()+"\n");
+        totalSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                int total = source.getValue();
+                setTotal(total);
+                repaint();
+                totalLabel.setText("Circles Generation Rate = " + total +"\n");
+                totalSlider.setEnabled(shouldRepaint);
+            }
+        });
+
+        sliderPanel.add(totalLabel,BorderLayout.EAST);
+        sliderPanel.add(totalSlider,BorderLayout.CENTER);
+        add(sliderPanel,BorderLayout.SOUTH);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-//        g.drawImage(image, 0, 0, null);
-        int total = 80;
         int count = 0;
         int attempts = 0;
         while (count<total){
@@ -114,7 +138,7 @@ public class CirclePackingAnimation extends JPanel {
         boolean valid = true;
         for (Circle c : circles) {
             double d = dist(x, y, c.x, c.y);
-            if(d < c.r+1){
+            if(d < c.r){
                 valid = false;
                 break;
             }
@@ -128,4 +152,9 @@ public class CirclePackingAnimation extends JPanel {
     public static double dist(int x1, int y1, int x2, int y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
+
+    public void setTotal(int total){
+        this.total = total;
+    }
+
 }
