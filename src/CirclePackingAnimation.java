@@ -23,6 +23,7 @@ public class CirclePackingAnimation extends JPanel {
     private JSlider totalSlider;
     BackgroundMusic backgroundMusic = new BackgroundMusic();
     private int total=10;
+    private boolean resetRequested = false;
 
     public CirclePackingAnimation() {
         setBackground(Color.BLACK);
@@ -53,7 +54,6 @@ public class CirclePackingAnimation extends JPanel {
 
         return resized;
     }
-
 
     void setup(){
         circles = new ArrayList<Circle>();
@@ -86,6 +86,12 @@ public class CirclePackingAnimation extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        if (resetRequested) {
+            g.clearRect(0, 0, getWidth(), getHeight());
+            resetRequested = false;
+        }
+
         int count = 0;
         int attempts = 0;
         while (count<total){
@@ -129,7 +135,12 @@ public class CirclePackingAnimation extends JPanel {
         }
         if(shouldRepaint)
             repaint();
+        else{
+            backgroundMusic.stopMusic();
+            showPopup();
+        }
     }
+
 
     private Circle newCircle() {
         int x = random.nextInt(image.getWidth());
@@ -156,5 +167,32 @@ public class CirclePackingAnimation extends JPanel {
     public void setTotal(int total){
         this.total = total;
     }
+    private void showPopup() {
+        int option = JOptionPane.showOptionDialog(this,
+                "Animation completed",
+                "Animation Completed",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new String[]{"Okay"},
+                "Menu");
 
+        if (option == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
+
+    private void menu() {
+        circles.clear();
+        JPanel menuPanel = new JPanel(new GridLayout(2, 1));
+
+        JButton menuButton = new JButton("Menu");
+        menuButton.addActionListener(e -> menu());
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.addActionListener(e -> System.exit(0));
+
+        menuPanel.add(menuButton);
+        menuPanel.add(exitButton);
+    }
 }

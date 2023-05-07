@@ -11,7 +11,6 @@ public class Main {
 
         frame.setLayout(new BorderLayout());
         frame.add(cpa,BorderLayout.CENTER);
-        cpa.repaint();
 
         frame.setLocationRelativeTo(null);
 
